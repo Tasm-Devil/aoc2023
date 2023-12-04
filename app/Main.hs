@@ -1,5 +1,5 @@
 module Main (main) where
 
-import Day3
+import Day4
 main :: IO ()
-main = easyLarge >>= print
+main = easySmall >>= print

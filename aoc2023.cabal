@@ -28,6 +28,7 @@ library
       Day1
       Day2
       Day3
+      Day4
       Utils
   other-modules:
       Paths_aoc2023
@@ -35,7 +36,7 @@ library
       Paths_aoc2023
   hs-source-dirs:
       src
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wno-unused-do-bind
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wno-unused-do-bind -Wmissing-home-modules
   build-depends:
       array
     , base >=4.7 && <5
@@ -57,7 +58,7 @@ executable aoc2023-exe
       Paths_aoc2023
   hs-source-dirs:
       app
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wno-unused-do-bind -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wno-unused-do-bind -Wmissing-home-modules -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aoc2023
     , array
@@ -81,7 +82,7 @@ test-suite aoc2023-test
       Paths_aoc2023
   hs-source-dirs:
       test
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wno-unused-do-bind -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wno-unused-do-bind -Wmissing-home-modules -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aoc2023
     , array

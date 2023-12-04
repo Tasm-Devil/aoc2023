@@ -12,6 +12,7 @@ dayNum :: Int
 dayNum = 1
 
 -------------------- PUTTING IT TOGETHER --------------------
+
 solveEasy :: FilePath -> IO (Maybe Int)
 solveEasy fp = do
   let input = parseFile parseInput fp
@@ -22,17 +23,6 @@ solveHard fp = do
   let input = parseFile parseInput fp
   Just . processInputHard <$> input
 
-{-
-solveEasy :: FilePath -> IO (Maybe Int)
-solveEasy fp = runStdoutLoggingT $ do
-  input <- parseFile parseInput fp
-  Just <$> processInputEasy input
-
-solveHard :: FilePath -> IO (Maybe Int)
-solveHard fp = runStdoutLoggingT $ do
-  input <- parseFile parseInput fp
-  Just <$> processInputHard input
--}
 -------------------- PARSING --------------------
 
 type InputType = [String]
@@ -55,14 +45,6 @@ processInputEasy = sum . map firstAndLastDigit
       case digits of
         [] -> 0
         (x : xs) -> read (x : [last (x : xs)])
-
-{-
-processInputEasy :: (MonadLogger m) => InputType -> m EasySolutionType
-processInputEasy intLists = return $ maximum (map sum intLists)
-
-findEasySolution :: (MonadLogger m) => EasySolutionType -> m (Maybe Int)
-findEasySolution i = return (Just i)
--}
 
 -------------------- SOLVING HARD --------------------
 type HardSolutionType = EasySolutionType
@@ -104,41 +86,6 @@ processInputHard = sum . map ((read :: String -> Int) . firstAndLastDigit2)
   where
     firstAndLastDigit2 [] = "0"
     firstAndLastDigit2 str = firstDigit str ++ lastDigit (reverse str)
-
-{-
-processInputHard :: (MonadLogger m) => InputType -> m HardSolutionType
-processInputHard intLists = return $ sum $ take 3 $ reverse $ sort (map sum intLists)
-
-findHardSolution :: (MonadLogger m) => HardSolutionType -> m (Maybe Int)
-findHardSolution i = return (Just i)
--}
-
--------------------- SOLUTION PATTERNS --------------------
-
--- solveFold :: (MonadLogger m) => [LineType] -> m EasySolutionType
--- solveFold = foldM foldLine initialFoldV
-
--- type FoldType = ()
-
--- initialFoldV :: FoldType
--- initialFoldV = undefined
-
--- foldLine :: (MonadLogger m) => FoldType -> LineType -> m FoldType
--- foldLine = undefined
-
--- type StateType = ()
-
--- initialStateV :: StateType
--- initialStateV = ()
-
--- solveStateN :: (MonadLogger m) => Int -> StateType -> m StateType
--- solveStateN 0 st = return st
--- solveStateN n st = do
---   st' <- evolveState st
---   solveStateN (n - 1) st'
-
--- evolveState :: (MonadLogger m) => StateType -> m StateType
--- evolveState st = undefined
 
 -------------------- BOILERPLATE --------------------
 smallFile :: FilePath

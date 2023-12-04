@@ -6,6 +6,7 @@ import Test.Tasty.HUnit ( testCase, (@?=) )
 import qualified Day1 as D1
 import qualified Day2 as D2
 import qualified Day3 as D3
+import qualified Day4 as D4
 
 main :: IO ()
 main = do
@@ -21,6 +22,10 @@ main = do
   day32 <- D3.easyLarge
   day33 <- D3.hardSmall
   day34 <- D3.hardLarge
+  day41 <- D4.easySmall
+  day42 <- D4.easyLarge
+  day43 <- D4.hardSmall
+  day44 <- D4.hardLarge
   defaultMain $ testGroup "Advent of Code Tests"
     [ testCase "Day 1-1" $ day11 @?= Just 209
     , testCase "Day 1-2" $ day12 @?= Just 54331
@@ -34,4 +39,8 @@ main = do
     , testCase "Day 3-2" $ day32 @?= Just 539713
     , testCase "Day 3-3" $ day33 @?= Just 467835
     , testCase "Day 3-4" $ day34 @?= Just 84159075
-    ]
+    , testCase "Day 4-1" $ day41 @?= Just 13
+    , testCase "Day 4-2" $ day42 @?= Just 21138
+    , testCase "Day 4-3" $ day43 @?= Just 30
+    , testCase "Day 4-4" $ day44 @?= Just 7185540
+    ] -- 30 --7185540
