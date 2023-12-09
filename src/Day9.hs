@@ -4,9 +4,9 @@ module Day9 where
 
 parseFile :: FilePath -> IO [[Int]]
 parseFile fp = do
-    inputFile <- readFile fp
-    let inputLines = map (map (read :: String -> Int) . words) . lines $ inputFile
-    return inputLines
+  inputFile <- readFile fp
+  let inputLines = map (map (read :: String -> Int) . words) . lines $ inputFile
+  return inputLines
 
 -------------------- SOLVING EASY --------------------
 
@@ -34,7 +34,7 @@ main :: IO ()
 main = do
   inputFile <- readFile "inputs_2023/day_9_large.txt"
   let inputLines = map (map (read :: String -> Int) . words) . lines $ inputFile
-  --inputLines <- parseFile largeFile
+  -- inputLines <- parseFile largeFile
   let nextIntegers = map computeNextInteger inputLines
   -- mapM_ print nextIntegers
   print . sum $ nextIntegers
