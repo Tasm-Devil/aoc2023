@@ -41,8 +41,15 @@ main = do
 
 -------------------- SOLVING HARD --------------------
 
+computePreviousInteger :: [Int] -> Int
+computePreviousInteger lst =
+  let differences = diffList lst
+   in if allTheSame differences
+        then head lst - head differences
+        else head lst - computePreviousInteger differences
+
 processInputHard :: [[Int]] -> Int
-processInputHard = undefined
+processInputHard = sum . map computePreviousInteger
 
 -------------------- BOILERPLATE --------------------
 

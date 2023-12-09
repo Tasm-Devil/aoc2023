@@ -35,6 +35,8 @@ main = do
   day72 <- D7.easyLarge
   day91 <- D9.easySmall
   day92 <- D9.easyLarge
+  day93 <- D9.hardSmall
+  day94 <- D9.hardLarge
   defaultMain $ testGroup "Advent of Code Tests"
     [ testCase "Day 1-1" $ day11 @?= Just 209
     , testCase "Day 1-2" $ day12 @?= Just 54331
@@ -58,4 +60,6 @@ main = do
     , testCase "Day 7-2" $ day72 @?= Just 253603890
     , testCase "Day 9-1" $ day91 @?= Just 114
     , testCase "Day 9-2" $ day92 @?= Just 1853145119
+    , testCase "Day 9-3" $ day93 @?= Just 2
+    , testCase "Day 9-4" $ day94 @?= Just 923
     ]
