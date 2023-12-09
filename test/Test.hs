@@ -9,6 +9,7 @@ import qualified Day3 as D3
 import qualified Day4 as D4
 import qualified Day6 as D6
 import qualified Day7 as D7
+import qualified Day9 as D9
 
 main :: IO ()
 main = do
@@ -32,6 +33,8 @@ main = do
   day64 <- D6.hardLarge
   day71 <- D7.easySmall
   day72 <- D7.easyLarge
+  day91 <- D9.easySmall
+  day92 <- D9.easyLarge
   defaultMain $ testGroup "Advent of Code Tests"
     [ testCase "Day 1-1" $ day11 @?= Just 209
     , testCase "Day 1-2" $ day12 @?= Just 54331
@@ -53,4 +56,6 @@ main = do
     , testCase "Day 6-4" $ day64 @?= Just 41382569
     , testCase "Day 7-1" $ day71 @?= Just 6440
     , testCase "Day 7-2" $ day72 @?= Just 253603890
+    , testCase "Day 9-1" $ day91 @?= Just 114
+    , testCase "Day 9-2" $ day92 @?= Just 1853145119
     ]
