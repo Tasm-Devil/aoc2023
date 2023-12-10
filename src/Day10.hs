@@ -1,8 +1,5 @@
 module Day10 where
 
--- this task sucks! I should use the BFS algorithm. But I am not in the mood today
-
-import Data.Char (chr, isDigit, ord)
 import Data.Matrix
 
 -------------------- PARSING --------------------
@@ -10,81 +7,89 @@ import Data.Matrix
 parseFile :: FilePath -> IO (Matrix Char)
 parseFile fp = do
   inputFile <- readFile fp
-  let inputLines = fromLists . lines . map (\c -> case c of 
-                                                      '7' -> 'A'
-                                                      'S' -> '0'
-                                                      _ -> c) $ inputFile
+  let inputLines = fromLists . lines $ inputFile
   return inputLines
 
 -------------------- SOLVING EASY --------------------
 
-processInputEasy :: Matrix Char -> Int
-processInputEasy = undefined
-
-step :: Int -> Int -> Matrix Char -> (Matrix Char, Maybe (Int, Int))
-step x y m -- (rows, cols) = (nrows m, ncols m)
-  | m ! (x, y) == 'L' && x > 1 && y < ncols m =
-      if isDigit $ m ! (x - 1, y)
-        then (changeMatrix (-1) 0, Just (x, y))
-        else
-          if isDigit $ m ! (x, y + 1)
-            then (changeMatrix 0 1, Just (x, y))
-            else (m, Nothing)
-  | m ! (x, y) == 'F' && x < nrows m && y < ncols m =
-      if isDigit $ m ! (x + 1, y)
-        then (changeMatrix 1 0, Just (x, y))
-        else
-          if isDigit $ m ! (x, y + 1)
-            then (changeMatrix 0 1, Just (x, y))
-            else (m, Nothing)
-  | m ! (x, y) == 'A' && x < nrows m && y > 1 =
-      if isDigit $ m ! (x + 1, y)
-        then (changeMatrix 1 0, Just (x, y))
-        else
-          if isDigit $ m ! (x, y - 1)
-            then (changeMatrix 0 (-1), Just (x, y))
-            else (m, Nothing)
-  | m ! (x, y) == 'J' && x > 1 && y > 1=
-      if isDigit $ m ! (x - 1, y)
-        then (changeMatrix (-1) 0, Just (x, y))
-        else
-          if isDigit $ m ! (x, y - 1)
-            then (changeMatrix 0 (-1), Just (x, y))
-            else (m, Nothing)
-  | m ! (x, y) == '|' && x > 1 && x < nrows m =
-      if isDigit $ m ! (x - 1, y)
-        then (changeMatrix (-1) 0, Just (x, y))
-        else
-          if isDigit $ m ! (x + 1, 1)
-            then (changeMatrix 1 0, Just (x, y))
-            else (m, Nothing)
-  | m ! (x, y) == '-' && y > 1 && y < ncols m =
-      if isDigit $ m ! (x, y - 1)
-        then (changeMatrix 0 (-1), Just (x, y))
-        else
-          if isDigit $ m ! (x, y + 1)
-            then (changeMatrix 0 1, Just (x, y))
-            else (m, Nothing)
-  | otherwise = (m, Nothing)
+nextStep :: Int -> (Int, Int) -> (Int, Int) -> Matrix Char -> IO (Either (Int, Int) Int)
+nextStep counter (prevRow, prevCol) (thisRow, thisCol) m -- 3 1  3 2 -> 2 2
+  | m ! (thisRow, thisCol) == 'L'
+      && prevRow == thisRow
+      && prevCol == thisCol + 1
+      && thisRow - 1 >= 1 =
+      go (thisRow - 1, thisCol) -- go up
+  | m ! (thisRow, thisCol) == 'L'
+      && prevRow == thisRow - 1
+      && prevCol == thisCol
+      && thisCol + 1 <= cols =
+      go (thisRow, thisCol + 1) -- go right
+  | m ! (thisRow, thisCol) == 'J'
+      && prevRow == thisRow
+      && prevCol == thisCol - 1
+      && thisRow - 1 >= 1 =
+      go (thisRow - 1, thisCol) -- go up
+  | m ! (thisRow, thisCol) == 'J'
+      && prevRow == thisRow - 1
+      && prevCol == thisCol
+      && thisCol - 1 >= 1 =
+      go (thisRow, thisCol - 1) -- go left
+  | m ! (thisRow, thisCol) == 'F'
+      && prevRow == thisRow
+      && prevCol == thisCol + 1
+      && thisRow + 1 <= rows =
+      go (thisRow + 1, thisCol) -- go down
+  | m ! (thisRow, thisCol) == 'F'
+      && prevRow == thisRow + 1
+      && prevCol == thisCol
+      && thisCol + 1 <= cols =
+      go (thisRow, thisCol + 1) -- go right
+  | m ! (thisRow, thisCol) == '7'
+      && prevRow == thisRow
+      && prevCol == thisCol - 1
+      && thisRow + 1 <= rows =
+      go (thisRow + 1, thisCol) -- go down
+  | m ! (thisRow, thisCol) == '7'
+      && prevRow == thisRow + 1
+      && prevCol == thisCol
+      && thisCol - 1 >= 1 =
+      go (thisRow, thisCol - 1) -- go left
+  | m ! (thisRow, thisCol) == '|'
+      && prevRow == thisRow - 1
+      && prevCol == thisCol
+      && thisRow + 1 <= rows =
+      go (thisRow + 1, thisCol) -- go down
+  | m ! (thisRow, thisCol) == '|'
+      && prevRow == thisRow + 1
+      && prevCol == thisCol
+      && thisRow - 1 >= 1 =
+      go (thisRow - 1, thisCol) -- go up
+  | m ! (thisRow, thisCol) == '-'
+      && prevRow == thisRow
+      && prevCol == thisCol - 1
+      && thisCol + 1 <= cols =
+      go (thisRow, thisCol + 1) -- go right
+  | m ! (thisRow, thisCol) == '-'
+      && prevRow == thisRow
+      && prevCol == thisCol + 1
+      && thisCol - 1 >= 1 =
+      go (thisRow, thisCol - 1) -- go left
+  | otherwise = pure $ Right counter
   where
-    changeMatrix dx dy = setElem (chr (1 + ord (m ! (x + dx, y + dy)))) (x, y) m
-
-numberOfNeighbors :: Int -> Int -> Matrix Char -> Int
-numberOfNeighbors x y m =
-  let (rows, cols) = (nrows m, ncols m)
-      above = ((x > 1) && isDigit (m ! (x - 1, y)))
-      below = ((x < rows) && isDigit (m ! (x + 1, y)))
-      left = ((y > 1) && isDigit (m ! (x, y - 1)))
-      right = ((y < cols) && isDigit (m ! (x, y + 1)))
-      num = sum $ map fromEnum [above, below, right, left]
-   in num
+    (rows, cols) = (nrows m, ncols m)
+    go (nextRow, nextCol) = do
+      -- print (nextRow, nextCol)
+      nextStep (counter + 1) (thisRow, thisCol) (nextRow, nextCol) m
 
 main :: IO ()
 main = do
-  m <- parseFile smallFile -- "7-F7-\n.FJ|7\nSJLL7\n|F--J\nLJ.LJ"
-  let (startx, starty) = (3, 1)
-  let (s1b, _) = step startx (starty+1) m
-  print s1b
+  m <- parseFile largeFile
+  -- print m
+  s <- nextStep 0 (25, 94) (26, 94) m
+  let x = case s of
+        Left _ -> 0
+        Right a -> (floor :: Double -> Int) $ (fromIntegral a + 1) / 2
+  print x -- == 6956
 
 -------------------- SOLVING HARD --------------------
 
@@ -96,30 +101,8 @@ processInputHard = undefined
 dayNum :: Int
 dayNum = 10
 
-solveEasy :: FilePath -> IO (Maybe Int)
-solveEasy fp = do
-  let input = parseFile fp
-  Just . processInputEasy <$> input
-
-solveHard :: FilePath -> IO (Maybe Int)
-solveHard fp = do
-  let input = parseFile fp
-  Just . processInputHard <$> input
-
 smallFile :: FilePath
 smallFile = "inputs_2023/day_" <> show dayNum <> "_small.txt"
 
 largeFile :: FilePath
 largeFile = "inputs_2023/day_" <> show dayNum <> "_large.txt"
-
-easySmall :: IO (Maybe Int)
-easySmall = solveEasy smallFile
-
-easyLarge :: IO (Maybe Int)
-easyLarge = solveEasy largeFile
-
-hardSmall :: IO (Maybe Int)
-hardSmall = solveHard smallFile
-
-hardLarge :: IO (Maybe Int)
-hardLarge = solveHard largeFile
