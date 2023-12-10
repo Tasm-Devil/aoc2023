@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Day1
+      Day10
       Day2
       Day3
       Day4
@@ -44,6 +45,7 @@ library
       array
     , base >=4.7 && <5
     , containers
+    , matrix
     , megaparsec
     , monad-logger
     , tasty
@@ -67,6 +69,7 @@ executable aoc2023-exe
     , array
     , base >=4.7 && <5
     , containers
+    , matrix
     , megaparsec
     , monad-logger
     , tasty
@@ -91,6 +94,7 @@ test-suite aoc2023-test
     , array
     , base >=4.7 && <5
     , containers
+    , matrix
     , megaparsec
     , monad-logger
     , tasty

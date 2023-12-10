@@ -30,6 +30,7 @@ dependencies:
 - tasty-hunit
 - text
 - unordered-containers
+- matrix
 
 
 ghc-options:
