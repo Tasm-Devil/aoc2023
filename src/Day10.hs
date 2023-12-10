@@ -2,18 +2,14 @@ module Day10 where
 
 import Data.Matrix
 
--------------------- PARSING --------------------
-
 parseFile :: FilePath -> IO (Matrix Char)
 parseFile fp = do
   inputFile <- readFile fp
   let inputLines = fromLists . lines $ inputFile
   return inputLines
 
--------------------- SOLVING EASY --------------------
-
 nextStep :: Int -> (Int, Int) -> (Int, Int) -> Matrix Char -> Int
-nextStep counter (prevRow, prevCol) (thisRow, thisCol) m -- 3 1  3 2 -> 2 2
+nextStep counter (prevRow, prevCol) (thisRow, thisCol) m
   | m ! (thisRow, thisCol) == 'L'
       && prevRow == thisRow
       && prevCol == thisCol + 1
@@ -85,11 +81,6 @@ main = do
   -- print m
   let cyclelength = nextStep 0 (25, 94) (26, 94) m
   print . (floor :: Double -> Int) $ (fromIntegral cyclelength + 1) / 2 -- == 6956
-
--------------------- SOLVING HARD --------------------
-
-processInputHard :: Matrix Char -> Int
-processInputHard = undefined
 
 -------------------- BOILERPLATE --------------------
 
