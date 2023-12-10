@@ -12,7 +12,7 @@ parseFile fp = do
 
 -------------------- SOLVING EASY --------------------
 
-nextStep :: Int -> (Int, Int) -> (Int, Int) -> Matrix Char -> IO (Either (Int, Int) Int)
+nextStep :: Int -> (Int, Int) -> (Int, Int) -> Matrix Char -> Int
 nextStep counter (prevRow, prevCol) (thisRow, thisCol) m -- 3 1  3 2 -> 2 2
   | m ! (thisRow, thisCol) == 'L'
       && prevRow == thisRow
@@ -74,22 +74,17 @@ nextStep counter (prevRow, prevCol) (thisRow, thisCol) m -- 3 1  3 2 -> 2 2
       && prevCol == thisCol + 1
       && thisCol - 1 >= 1 =
       go (thisRow, thisCol - 1) -- go left
-  | otherwise = pure $ Right counter
+  | otherwise = counter
   where
     (rows, cols) = (nrows m, ncols m)
-    go (nextRow, nextCol) = do
-      -- print (nextRow, nextCol)
-      nextStep (counter + 1) (thisRow, thisCol) (nextRow, nextCol) m
+    go (nextRow, nextCol) = nextStep (counter + 1) (thisRow, thisCol) (nextRow, nextCol) m
 
 main :: IO ()
 main = do
   m <- parseFile largeFile
   -- print m
-  s <- nextStep 0 (25, 94) (26, 94) m
-  let x = case s of
-        Left _ -> 0
-        Right a -> (floor :: Double -> Int) $ (fromIntegral a + 1) / 2
-  print x -- == 6956
+  let cyclelength = nextStep 0 (25, 94) (26, 94) m
+  print . (floor :: Double -> Int) $ (fromIntegral cyclelength + 1) / 2 -- == 6956
 
 -------------------- SOLVING HARD --------------------
 
