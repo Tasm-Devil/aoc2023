@@ -1,7 +1,6 @@
 module Main (main) where
 
-import qualified Day10 as D10
+import qualified Day12 as D12
 
 main :: IO ()
-main = D10.main
---main = easySmall >>= print
+main = D12.easyLarge >>= print
