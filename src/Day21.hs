@@ -5,8 +5,6 @@ import Data.Set as Set
 
 -------------------- PARSING --------------------
 
-type Coord = (Int, Int)
-
 parseFile :: FilePath -> IO (Matrix Char)
 parseFile fp = do
   inputFile <- readFile fp
@@ -14,6 +12,8 @@ parseFile fp = do
   return inputLines
 
 -------------------- SOLVING EASY --------------------
+
+type Coord = (Int, Int)
 
 possibleNeighborsOf :: Matrix Char -> Coord -> Set Coord
 possibleNeighborsOf matrix (x, y) = Set.filter filterGardenPlots all4Neighbors
@@ -26,10 +26,10 @@ possibleNeighborsOf matrix (x, y) = Set.filter filterGardenPlots all4Neighbors
       _ -> False
 
 nextStep :: Matrix Char -> Set Coord -> Set Coord
-nextStep matrix = Set.foldr foldPred Set.empty
+nextStep matrix = Set.foldr accum Set.empty
   where
-    foldPred :: Coord -> Set Coord -> Set Coord
-    foldPred c acc = Set.union acc $ possibleNeighborsOf matrix c
+    accum :: Coord -> Set Coord -> Set Coord
+    accum coord acc = Set.union acc $ possibleNeighborsOf matrix coord
 
 solve :: Int -> Matrix Char -> Set Coord -> (Matrix Char -> Set Coord -> Set Coord) -> Set Coord
 solve 0 _ start _ = start
@@ -48,14 +48,7 @@ findStart mat = case findElem 'S' mat 1 1 of
       | otherwise = findElem c m i (j + 1)
 
 processInputEasy :: Matrix Char -> Int
-processInputEasy matrix = length $ solve 100 matrix (Set.fromList [start]) nextStep
-  where 
-    start = findStart matrix
-
--------------------- SOLVING HARD --------------------
-
-processInputHard :: Matrix Char -> Int
-processInputHard = undefined
+processInputEasy matrix = length $ solve 64 matrix (Set.fromList [findStart matrix]) nextStep
 
 -------------------- BOILERPLATE --------------------
 
@@ -66,11 +59,6 @@ solveEasy :: FilePath -> IO (Maybe Int)
 solveEasy fp = do
   let input = parseFile fp
   Just . processInputEasy <$> input
-
-solveHard :: FilePath -> IO (Maybe Int)
-solveHard fp = do
-  let input = parseFile fp
-  Just . processInputHard <$> input
 
 smallFile :: FilePath
 smallFile = "inputs_2023/day_" <> show dayNum <> "_small.txt"
@@ -83,9 +71,3 @@ easySmall = solveEasy smallFile
 
 easyLarge :: IO (Maybe Int)
 easyLarge = solveEasy largeFile
-
-hardSmall :: IO (Maybe Int)
-hardSmall = solveHard smallFile
-
-hardLarge :: IO (Maybe Int)
-hardLarge = solveHard largeFile
