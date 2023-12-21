@@ -31,9 +31,9 @@ nextStep matrix = Set.foldr accum Set.empty
     accum :: Coord -> Set Coord -> Set Coord
     accum coord acc = Set.union acc $ possibleNeighborsOf matrix coord
 
-solve :: Int -> Matrix Char -> Set Coord -> (Matrix Char -> Set Coord -> Set Coord) -> Set Coord
-solve 0 _ start _ = start
-solve num matrix start fun = solve (num - 1) matrix (fun matrix start) fun
+walk :: Int -> Matrix Char -> Set Coord -> Set Coord
+walk 0 _ start = start
+walk steps matrix start = walk (steps - 1) matrix (nextStep matrix start)
 
 findStart :: Matrix Char -> Coord
 findStart mat = case findElem 'S' mat 1 1 of
@@ -48,7 +48,7 @@ findStart mat = case findElem 'S' mat 1 1 of
       | otherwise = findElem c m i (j + 1)
 
 processInputEasy :: Matrix Char -> Int
-processInputEasy matrix = length $ solve 64 matrix (Set.fromList [findStart matrix]) nextStep
+processInputEasy matrix = length $ walk 64 matrix (Set.fromList [findStart matrix])
 
 -------------------- BOILERPLATE --------------------
 
